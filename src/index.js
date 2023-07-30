@@ -171,6 +171,7 @@ function gameOver() {
   alert.className = "alert";
   alert.textContent = "Game Over";
   alertContainer.append(alert);
+  alertContainer.classList.add("show")
 }
 
 startGame();
@@ -180,6 +181,7 @@ function handleRestart() {
   document.querySelectorAll(".cell").forEach((cell) => cell.remove());
   scoreElement.textContent = "Score: " + (score = 0);
   alertContainer.querySelector(".alert")?.remove();
+  alertContainer?.classList.remove("show")
 
   const restartButton = document.querySelector('[data-key="restart"]');
   restartButton.addEventListener(

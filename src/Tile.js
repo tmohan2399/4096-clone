@@ -19,7 +19,7 @@ Tile.prototype.setValue = function (value, isMergeTile) {
     (1 - (((log2 - 1) % (MAX_POWER_OF_2 - 1)) + 1) / MAX_POWER_OF_2) * 100
   );
 
-  const textLightness = backgroundLightness > 50 ? 10 : 90;
+  const textLightness = backgroundLightness > 40 ? 10 : 90;
   const backgroundHue = BACKGROUND_HUE_LIST[Math.floor(log2 / MAX_POWER_OF_2)];
 
   this.tileElement.style.setProperty(
