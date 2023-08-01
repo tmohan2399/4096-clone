@@ -26,25 +26,32 @@ function startGame() {
 function startInteraction() {
   document.addEventListener(
     "keyup",
-    (e) => handlePlayMoves(e.key?.slice(5)?.toLowerCase()),
+    (e) => {
+      gameBoard.removeEventListener("touchstart", handleTouchStart);
+      gameBoard.removeEventListener("touchmove", handleTouchMove);
+      gameBoard.removeEventListener("touchend", handleTouchEnd);
+      handlePlayMoves(e.key?.slice(5)?.toLowerCase());
+    },
     { once: true }
   );
   touchStartX = touchStartY = touchEndX = touchEndY = null;
 
-  gameBoard.addEventListener(
-    "touchstart",
-    (e) => {
-      console.log(e);
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    },
-    { once: true }
-  );
+  gameBoard.addEventListener("touchstart", handleTouchStart, { once: true });
   gameBoard.addEventListener("touchmove", handleTouchMove);
-  gameBoard.addEventListener("touchend", handleSwipe, { once: true });
+  gameBoard.addEventListener("touchend", handleTouchEnd, { once: true });
 }
 
-function handleSwipe() {
+function handleTouchStart(e) {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}
+
+function handleTouchMove(e) {
+  touchEndX = e.touches[0].clientX;
+  touchEndY = e.touches[0].clientY;
+}
+
+function handleTouchEnd() {
   gameBoard.removeEventListener("touchmove", handleTouchMove);
 
   if (touchStartX == null || touchEndX == null) return;
@@ -57,11 +64,6 @@ function handleSwipe() {
   else if (angle > 45 && angle <= 135) handlePlayMoves("down");
   else if (angle > -135 && angle <= -45) handlePlayMoves("up");
   else handlePlayMoves("left");
-}
-
-function handleTouchMove(e) {
-  touchEndX = e.touches[0].clientX;
-  touchEndY = e.touches[0].clientY;
 }
 
 async function handlePlayMoves(action) {
